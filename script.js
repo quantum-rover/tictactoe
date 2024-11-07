@@ -41,10 +41,10 @@ function handleClick(e) {
     // Check for win or draw
     if (checkWin(currentClass)) {
         highlightWinningCombination(currentClass);
-        displayResult(`${currentClass} wins!`);
+        //displayResult(`${currentClass} wins!`);
         disableBoard();
     } else if (board.every(cell => cell !== '')) {
-        displayResult("It's a draw!");
+       // displayResult("It's a draw!");
         disableBoard();
     } else {
         isXTurn = !isXTurn; // Switch turns
