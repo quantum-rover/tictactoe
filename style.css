@@ -47,3 +47,8 @@ h1 {
     font-size: 1rem;
     cursor: pointer;
 }
+
+.highlight {
+    background-color: #d3f8d3; /* Light green to highlight the last move */
+}
+
