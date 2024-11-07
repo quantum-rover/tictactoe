@@ -8,8 +8,6 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #f5f5f5;
-    overflow: hidden;
-    touch-action: none;
 }
 #game-container {
     display: grid;
@@ -19,18 +17,18 @@ body {
     max-width: 300px;
 }
 [data-cell] {
-    width: 30vw;
-    height: 30vw;
+    width: 30vw; /* Set width as a percentage of viewport width */
+    height: 30vw; /* Set height as a percentage of viewport width */
     max-width: 100px;
-    max-height: 100px;
+    max-height: 100px; /* Set max size for larger screens */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 8vw;
+    font-size: 8vw; /* Responsive font size for mobile */
     border: 2px solid #444;
     cursor: pointer;
     background-color: #f0f8ff;
-    transition: none;
+    transition: none; /* Disable transitions */
 }
 .x-move {
     color: #e63946;
@@ -42,7 +40,7 @@ body {
     background-color: #d3f8d3;
 }
 .winning-cell {
-    background-color: #ffd700;
+    background-color: #ffd700; /* Gold color */
 }
 #reset-button {
     margin-top: 20px;
@@ -65,6 +63,6 @@ body {
 }
 @media (min-width: 600px) {
     [data-cell] {
-        font-size: 5vw;
+        font-size: 5vw; /* Adjust font size for larger screens */
     }
 }
