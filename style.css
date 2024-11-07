@@ -1,57 +1,68 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f9;
+    background-color: #f5f5f5;
 }
-
-.container {
-    text-align: center;
-}
-
-h1 {
-    margin-bottom: 20px;
-}
-
-#game-board {
+#game-container {
     display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+    width: 90vw;
+    max-width: 300px;
 }
-
-.cell {
-    width: 100px;
-    height: 100px;
+[data-cell] {
+    width: 30vw; /* Set width as a percentage of viewport width */
+    height: 30vw; /* Set height as a percentage of viewport width */
+    max-width: 100px;
+    max-height: 100px; /* Set max size for larger screens */
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 2rem;
-    font-weight: bold;
-    background-color: #fff;
-    border: 2px solid #333;
+    justify-content: center;
+    font-size: 8vw; /* Responsive font size for mobile */
+    border: 2px solid #444;
     cursor: pointer;
+    background-color: #f0f8ff;
+    transition: none; /* Disable transitions */
 }
-
+.x-move {
+    color: #e63946;
+}
+.o-move {
+    color: #2a9d8f;
+}
+.highlight {
+    background-color: #d3f8d3;
+}
+.winning-cell {
+    background-color: #ffd700; /* Gold color */
+}
 #reset-button {
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 1rem;
+    background-color: #0077b6;
+    color: #fff;
+    border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
-
-.highlight {
-    background-color: #d3f8d3; /* Light green to highlight the last move */
+#reset-button:hover {
+    background-color: #005f7e;
 }
-
-.winning-cell {
-    background-color: #ffd700; /* Gold color to highlight the winning cells */
+#result-display, #score-display {
+    margin-top: 10px;
+    font-size: 4vw;
+    text-align: center;
+    color: #333;
+}
+@media (min-width: 600px) {
+    [data-cell] {
+        font-size: 5vw; /* Adjust font size for larger screens */
+    }
 }
