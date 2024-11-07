@@ -52,3 +52,6 @@ h1 {
     background-color: #d3f8d3; /* Light green to highlight the last move */
 }
 
+.winning-cell {
+    background-color: #ffd700; /* Gold color to highlight the winning cells */
+}
