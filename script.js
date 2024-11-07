@@ -33,6 +33,7 @@ function handleClick(e) {
 
     // Check for win or draw
     if (checkWin(currentClass)) {
+        highlightWinningCombination(currentClass);
         resultDisplay.textContent = `${currentClass} wins!`;
         disableBoard();
     } else if (board.every(cell => cell !== '')) {
@@ -44,9 +45,21 @@ function handleClick(e) {
 }
 
 function checkWin(currentClass) {
-    return winningCombinations.some(combination => {
-        return combination.every(index => board[index] === currentClass);
+    return winningCombinations.find(combination => {
+        if (combination.every(index => board[index] === currentClass)) {
+            return combination;
+        }
+        return false;
     });
+}
+
+function highlightWinningCombination(currentClass) {
+    const winningCombination = checkWin(currentClass);
+    if (winningCombination) {
+        winningCombination.forEach(index => {
+            cells[index].classList.add('winning-cell');
+        });
+    }
 }
 
 function disableBoard() {
@@ -58,6 +71,7 @@ function resetBoard() {
     cells.forEach(cell => {
         cell.textContent = '';
         cell.classList.remove('highlight');
+        cell.classList.remove('winning-cell');
     });
     resultDisplay.textContent = ''; // Clear the result message
     isXTurn = true;
