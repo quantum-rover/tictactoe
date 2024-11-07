@@ -4,11 +4,16 @@ const resetButton = document.getElementById('reset-button');
 const gameContainer = document.getElementById('game-container');
 let isXTurn = true;
 let board = ['', '', '', '', '', '', '', '', ''];
+let playerX = prompt("Enter Player X's name:", "") || "Player X";
+let playerO = prompt("Enter Player O's name:", "") || "Player O";
+let score = { [playerX]: 0, [playerO]: 0 };
 
 // Create a result display element
-const resultDisplay = document.createElement('div');
-resultDisplay.id = 'result-display';
-document.body.appendChild(resultDisplay);
+const resultDisplay = document.getElementById('result-display');
+
+// Create score display element
+const scoreDisplay = document.getElementById('score-display');
+updateScoreDisplay();
 
 // Winning combinations
 const winningCombinations = [
@@ -25,6 +30,7 @@ const winningCombinations = [
 function handleClick(e) {
     const cell = e.target;
     const currentClass = isXTurn ? 'X' : 'O';
+    const currentPlayer = isXTurn ? playerX : playerO;
     const cellIndex = Array.from(cells).indexOf(cell);
 
     if (board[cellIndex] !== '') return; // Prevent overwriting moves
@@ -41,10 +47,12 @@ function handleClick(e) {
     // Check for win or draw
     if (checkWin(currentClass)) {
         highlightWinningCombination(currentClass);
-        //displayResult(`${currentClass} wins!`);
+        displayResult(`${currentPlayer} (${currentClass}) wins!`);
+        score[currentPlayer] += 1;
+        updateScoreDisplay();
         disableBoard();
     } else if (board.every(cell => cell !== '')) {
-       // displayResult("It's a draw!");
+        displayResult("It's a draw!");
         disableBoard();
     } else {
         isXTurn = !isXTurn; // Switch turns
@@ -77,6 +85,10 @@ function displayResult(message) {
     }, 100);
 }
 
+function updateScoreDisplay() {
+    scoreDisplay.innerHTML = `Score: ${playerX} (X) - ${score[playerX]} | ${playerO} (O) - ${score[playerO]}`;
+}
+
 function disableBoard() {
     cells.forEach(cell => cell.removeEventListener('click', handleClick));
 }
@@ -94,67 +106,6 @@ function resetBoard() {
     cells.forEach(cell => cell.addEventListener('click', handleClick));
 }
 
-// Add event listeners to cells and reset button
+// Add event listeners to cells
 cells.forEach(cell => cell.addEventListener('click', handleClick));
 resetButton.addEventListener('click', resetBoard);
-
-// Add styles for coloring and better appearance
-document.head.insertAdjacentHTML('beforeend', `
-    <style>
-        #game-container {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-gap: 5px;
-            margin: 20px auto;
-        }
-        [data-cell] {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            border: 2px solid #444;
-            cursor: pointer;
-            background-color: #f0f8ff;
-        }
-        .x-move {
-            color: #e63946;
-        }
-        .o-move {
-            color: #2a9d8f;
-        }
-        .highlight {
-            background-color: #d3f8d3;
-        }
-        .winning-cell {
-            background-color: #ffd700; /* Gold color */
-        }
-        #reset-button {
-            margin: 20px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            background-color: #0077b6;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        #reset-button:hover {
-            background-color: #005f7e;
-        }
-        #result-display {
-            margin-top: 20px;
-            font-size: 1.5rem;
-            text-align: center;
-            color: #333;
-        }
-        .show-result {
-            animation: fadeIn 1s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
-`);
