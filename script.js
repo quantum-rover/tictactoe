@@ -92,23 +92,39 @@ function handleClick(e) {
 
 function computerMove() {
     const emptyCells = board.map((value, index) => value === '' ? index : null).filter(index => index !== null);
+    if (emptyCells.length === 0) return; // No moves left
+
     const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
     const cell = cells[randomIndex];
 
-    handleClick({ target: cell });
+    board[randomIndex] = 'O';
+    cell.textContent = 'O';
+    cell.classList.add('o-move');
+
+    if (checkWin('O')) {
+        highlightWinningCombination('O');
+        displayResult(`Computer (O) wins!`);
+        score['Computer'] += 1;
+        updateScoreDisplay();
+        disableBoard();
+    } else if (board.every(cell => cell !== '')) {
+        displayResult("It's a draw!");
+        disableBoard();
+    } else {
+        isXTurn = true; // Switch back to player's turn
+    }
 }
 
 function checkWin(currentClass) {
-    return winningCombinations.find(combination => {
-        if (combination.every(index => board[index] === currentClass)) {
-            return combination;
-        }
-        return false;
+    return winningCombinations.some(combination => {
+        return combination.every(index => board[index] === currentClass);
     });
 }
 
 function highlightWinningCombination(currentClass) {
-    const winningCombination = checkWin(currentClass);
+    const winningCombination = winningCombinations.find(combination => {
+        return combination.every(index => board[index] === currentClass);
+    });
     if (winningCombination) {
         winningCombination.forEach(index => {
             cells[index].classList.add('winning-cell');
