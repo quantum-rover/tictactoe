@@ -2,6 +2,8 @@ const cells = document.querySelectorAll('[data-cell]');
 const resetButton = document.getElementById('reset-button');
 let isXTurn = true;
 let board = ['', '', '', '', '', '', '', '', ''];
+let resultDisplay = document.createElement('div'); // Create a result display element
+document.body.appendChild(resultDisplay); // Append it to the body
 
 const winningCombinations = [
     [0, 1, 2],
@@ -21,15 +23,21 @@ function handleClick(e) {
 
     if (board[cellIndex] !== '') return; // Prevent overwriting moves
 
+    // Update the game state
     board[cellIndex] = currentClass;
     cell.textContent = currentClass;
-    
+
+    // Highlight last move
+    cells.forEach(cell => cell.classList.remove('highlight'));
+    cell.classList.add('highlight');
+
+    // Check for win or draw
     if (checkWin(currentClass)) {
-        alert(`${currentClass} wins!`);
-        resetBoard();
+        resultDisplay.textContent = `${currentClass} wins!`;
+        disableBoard();
     } else if (board.every(cell => cell !== '')) {
-        alert("It's a draw!");
-        resetBoard();
+        resultDisplay.textContent = "It's a draw!";
+        disableBoard();
     } else {
         isXTurn = !isXTurn; // Switch turns
     }
@@ -41,12 +49,21 @@ function checkWin(currentClass) {
     });
 }
 
+function disableBoard() {
+    cells.forEach(cell => cell.removeEventListener('click', handleClick));
+}
+
 function resetBoard() {
     board = ['', '', '', '', '', '', '', '', ''];
     cells.forEach(cell => {
         cell.textContent = '';
+        cell.classList.remove('highlight');
     });
+    resultDisplay.textContent = ''; // Clear the result message
     isXTurn = true;
+
+    // Re-enable event listeners
+    cells.forEach(cell => cell.addEventListener('click', handleClick));
 }
 
 // Event listeners
