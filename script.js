@@ -2,11 +2,38 @@
 const cells = document.querySelectorAll('[data-cell]');
 const resetButton = document.getElementById('reset-button');
 const gameContainer = document.getElementById('game-container');
+const gameModeContainer = document.getElementById('game-mode');
+const playerVsPlayerButton = document.getElementById('player-vs-player');
+const playerVsComputerButton = document.getElementById('player-vs-computer');
 let isXTurn = true;
 let board = ['', '', '', '', '', '', '', '', ''];
-let playerX = prompt("Enter Player X's name:", "") || "Player X";
-let playerO = prompt("Enter Player O's name:", "") || "Player O";
-let score = { [playerX]: 0, [playerO]: 0 };
+let playerX, playerO, score;
+let playingAgainstComputer = false;
+
+// Set event listeners for game mode buttons
+playerVsPlayerButton.addEventListener('click', () => {
+    playerX = prompt("Enter Player X's name:", "") || "Player X";
+    playerO = prompt("Enter Player O's name:", "") || "Player O";
+    score = { [playerX]: 0, [playerO]: 0 };
+    playingAgainstComputer = false;
+    startGame();
+});
+
+playerVsComputerButton.addEventListener('click', () => {
+    playerX = prompt("Enter Player's name:", "") || "Player";
+    playerO = "Computer";
+    score = { [playerX]: 0, [playerO]: 0 };
+    playingAgainstComputer = true;
+    startGame();
+});
+
+function startGame() {
+    gameModeContainer.style.display = 'none';
+    gameContainer.style.display = 'grid';
+    resetButton.style.display = 'block';
+    updateScoreDisplay();
+    resetBoard();
+}
 
 // Create a result display element
 const resultDisplay = document.getElementById('result-display');
@@ -56,7 +83,19 @@ function handleClick(e) {
         disableBoard();
     } else {
         isXTurn = !isXTurn; // Switch turns
+
+        if (playingAgainstComputer && !isXTurn) {
+            setTimeout(computerMove, 500); // Add a delay for the computer's move
+        }
     }
+}
+
+function computerMove() {
+    const emptyCells = board.map((value, index) => value === '' ? index : null).filter(index => index !== null);
+    const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    const cell = cells[randomIndex];
+
+    handleClick({ target: cell });
 }
 
 function checkWin(currentClass) {
